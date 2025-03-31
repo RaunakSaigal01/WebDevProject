@@ -10,36 +10,45 @@ function Form() {
     workType: "electrical",
     category: "requisition",
     comments: "",
-    file: null,
+    proof: null,
   });
+  const[selectedFile,setselectedFile]=useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, file: e.target.files[0] });
+    setFormData({...formData,proof:e.target.files[0]});
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted Data:", formData);
-    alert("Form submitted successfully!");
-  
-    // Clear the form after submission
-    setFormData({
-      regNo: "",
-      name: "",
-      block: "",
-      roomNo: "",
-      workType: "electrical",
-      category: "requisition",
-      comments: "",
-      file: null,
-    });
-  };
-  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formDataToSend = new FormData();
+    for(const key in formData){
+      formDataToSend.append(key,formData[key]);
+    }
+    console.log("FormData being sent:", Object.fromEntries(formDataToSend.entries()));
+    try {
+        const response = await fetch("http://localhost:5000/submit-request", {
+            method: "POST",
+            body: formDataToSend
+        });
 
+        const data = await response.json();
+        if (response.ok) {
+            alert("✅ Form submitted successfully!");
+            console.log("Uploaded Proof Path:", data.proof);
+        } else {
+            alert("❌ Error submitting form");
+        }
+    } catch (error) {
+        console.error("❌ Failed to submit form:", error);
+    }
+    setFormData({ regNo: "", name: "", block: "", roomNo: "", workType: "electrical", category: "requisition", comments: "" ,proof:null});
+};
+
+  
   return (
     <>
     <nav className="navbar">
@@ -72,7 +81,7 @@ function Form() {
         </select>
 
         <textarea name="comments" value={formData.comments} placeholder="Comments" onChange={handleChange}></textarea>
-        <input type="file" accept=".pdf,.doc,.jpg" onChange={handleFileChange} />
+        <input name ="proof" type="file" onChange={handleFileChange} />
         
         <button type="submit">Submit</button>
       </form>
