@@ -29,7 +29,6 @@ db.connect((err) => {
     console.log("Connected to MySQL database");
 });
 
-// Signup API
 app.post("/signup", async (req, res) => {
     const { name, regNo, phone, email, password } = req.body;
     if (!name || !regNo || !phone || !email || !password) {
@@ -175,7 +174,6 @@ app.post("/download/pdf", (req, res) => {
 
 
 
-// 📌 Generate Excel Report
 app.post("/download/xlsx", async (req, res) => {
     const { reports } = req.body;
 
@@ -209,12 +207,6 @@ app.post("/download/xlsx", async (req, res) => {
     res.end();
 });
 
-
-
-
-
-
-// 📌 Generate DOCX Report
 app.post("/download/docx", async (req, res) => {
     const { reports } = req.body;
 
@@ -252,10 +244,6 @@ app.post("/download/docx", async (req, res) => {
 });
 
 
-
-
-
-// Start the Server
 app.listen(5000, () => {
     console.log("Server running on port 5000");
 });
