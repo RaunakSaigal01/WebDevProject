@@ -4,7 +4,7 @@ const AdminReports = () => {
     const [reportType, setReportType] = useState("student-wise");
     const [value, setValue] = useState("");
     const [reports, setReports] = useState([]);
-    const [canDownload, setCanDownload] = useState(false); // ✅ Enable download only after fetching reports
+    const [canDownload, setCanDownload] = useState(false); 
 
     const fetchReports = async () => {
         try {
@@ -16,7 +16,7 @@ const AdminReports = () => {
 
             const data = await response.json();
             setReports(data);
-            setCanDownload(true); // ✅ Allow download only if reports are available
+            setCanDownload(true); 
         } catch (error) {
             console.error("Error fetching reports:", error);
             setCanDownload(false);
